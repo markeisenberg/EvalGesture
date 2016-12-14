@@ -34,7 +34,7 @@ String xval = "x: Null";
 String yval = "y: Null";
 String zval = "x: Null";
 
-boolean upDetect = false;
+boolean upDetect = false, downDetect = false, leftDetect = false, rightDetect = false;
 
 float storeX = 0;
 float storeY = 0;
@@ -132,18 +132,42 @@ for (int x = -80; x < width; x+=160)
 }
 
 void checkMovement(){
-  if (yvalEd > 9 && yvalEd <10){
+  if (yvalEd > 7 && yvalEd <10){
     println ("LEFT");
+    leftDetect = true;
+    downDetect = false;
+    upDetect = false;
+    rightDetect = false;
+    
+    if (leftDetect == true){
     posx= posx-160;
+    }
+    else if (rightDetect == true||
+    downDetect == true ||
+    upDetect == true){
+      //nothing
+    }
       //}
       println(posx, posy);
       if (posx < 260){
         posx = 260;
       }
   }
-  if (yvalEd < -8 && yvalEd > -9){
+  if (yvalEd < -10 && yvalEd > -12){
     println ("RIGHT");
+    leftDetect = false;
+    downDetect = false;
+    upDetect = false;
+    rightDetect = true;
+    
+    if (rightDetect == true){
     posx= posx+160;
+    }
+    else if (leftDetect == true||
+    downDetect == true ||
+    upDetect == true){
+      //nothing
+    }
       //}
       println(posx, posy);
       if (posx > 900){
@@ -152,21 +176,35 @@ void checkMovement(){
   }
   if (xvalEd > 8){
     println ("SELECT");
-    following =! following;
+    following = true;
   }
-  if (zvalEd > 20){
+  if (zvalEd > 24){
     println ("DOWN");
-    upDetect = true;
+    upDetect = false;
+    leftDetect = false;
+    downDetect = true;
+    rightDetect = false;
+    
+    if (downDetect == true){
     posy = posy + 160;
+    }
+    
       //}
       println(posx, posy);
       if (posy > 660){
         posy = 660;
       }
   }
-  if (zvalEd < -8 & upDetect == true){
+  if (zvalEd < -4){
     println ("UP");
+    upDetect = true;
+    leftDetect = false;
+    downDetect = false;
+    rightDetect = false;
+    
+    if (upDetect == true){
     posy = posy - 160;
+    }
       //}
       println(posx, posy);
       if (posy < 20){
