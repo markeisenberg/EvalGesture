@@ -3,8 +3,26 @@ import org.gamecontrolplus.*;
 import org.gamecontrolplus.gui.*;
 
 import oscP5.*;
+import netP5.*;
 
 OscP5 oscP5;
+
+//*** Processing GRT code
+final int pipelineMode = GRT.CLASSIFICATION_MODE;
+final int numInputs = 3;
+final int numOutputs = 1;
+
+//Set the OSC ports used for the GRT GUI and for Processing
+final int guiPort = 5000;
+final int processingPort = 5001;
+
+GRT grt = new GRT( pipelineMode, numInputs, numOutputs, "127.0.0.1", guiPort, processingPort, true );
+
+//Create some global variables to hold our data
+float[] data = new float[ numInputs ];
+float[] targetVector = new float[ numOutputs ];
+PFont font;
+//*** End Processing GRT code
 
 ControlIO control;
 Configuration config;
@@ -43,6 +61,7 @@ float storeZ = 0;
 void setup() {
   size(1280,800);
   //fullScreen();
+  font = loadFont("SansSerif-48.vlw");
   
   // Initialise the ControlIO
   control = ControlIO.getInstance(this);
@@ -61,12 +80,12 @@ void setup() {
     randArrayY[randy] = randArrayY[randy] + 160;
   }
   
-  oscP5 = new OscP5(this,9000);
+  //oscP5 = new OscP5(this,9000);
   
-  oscP5.plug(this,"rawaccel","/wii/1/accel/xyz");
-  oscP5.plug(this,"x","/wii/1/accel/xyz/0");
-  oscP5.plug(this,"y","/wii/1/accel/xyz/1");
-  oscP5.plug(this,"z","/wii/1/accel/xyz/2");
+  //oscP5.plug(this,"rawaccel","/wii/1/accel/xyz");
+  //oscP5.plug(this,"x","/wii/1/accel/xyz/0");
+  //oscP5.plug(this,"y","/wii/1/accel/xyz/1");
+ // oscP5.plug(this,"z","/wii/1/accel/xyz/2");
 }
 
 void rawaccel(float _x, float _y, float _z) {
@@ -77,6 +96,8 @@ void rawaccel(float _x, float _y, float _z) {
 
 void draw() 
 {
+  //println(grt.getPredictedClassLabel());
+  
 for (int x = -80; x < width; x+=160) 
 {
   for (int y = 0; y < height; y+=160)
