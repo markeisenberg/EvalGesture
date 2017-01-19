@@ -1,0 +1,12 @@
+/ActionStartEvent.class
+/ActionStopEvent.class
+/GestureEvent.class
+/GestureListener.class
+/InfraredEvent.class
+/StateEvent.class
+/WiimoteAccelerationEvent.class
+/WiimoteButtonPressedEvent.class
+/WiimoteButtonReleasedEvent.class
+/WiimoteListener.class
+/WiimoteMotionStartEvent.class
+/WiimoteMotionStopEvent.class

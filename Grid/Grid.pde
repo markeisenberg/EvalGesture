@@ -1,44 +1,13 @@
 import net.java.games.input.*;
-import org.gamecontrolplus.*;
-import org.gamecontrolplus.gui.*;
 
 import oscP5.*;
-import netP5.*;
 
 OscP5 oscP5;
-
-//*** Processing GRT code
-final int pipelineMode = GRT.CLASSIFICATION_MODE;
-final int numInputs = 3;
-final int numOutputs = 1;
-
-//Set the OSC ports used for the GRT GUI and for Processing
-final int guiPort = 5000;
-final int processingPort = 5001;
-
-GRT grt = new GRT( pipelineMode, numInputs, numOutputs, "127.0.0.1", guiPort, processingPort, true );
-
-//Create some global variables to hold our data
-float[] data = new float[ numInputs ];
-float[] targetVector = new float[ numOutputs ];
-PFont font;
-//*** End Processing GRT code
-
-ControlIO control;
-Configuration config;
-//ControlDevice gpad;
 
 int box = 160;
 int radius = 10, directionX = 1, directionY = 0;
 float posx=580, posy=340;
-
-float x;
-float y;
-float z;
-
-float xvalEd;
-float yvalEd;
-float zvalEd;
+int value;
 
 float randArrayX[] = {320,480, 640, 800, 960};
 float randArrayY[] = {720, 560, 400, 240, 80};
@@ -47,30 +16,21 @@ int randx = (int)random(randArrayX.length);
 int randy = (int)random(randArrayY.length); 
 
 boolean following = false;
+boolean overlap = false;
 
 String xval = "x: Null";
 String yval = "y: Null";
 String zval = "x: Null";
 
-boolean upDetect = false, downDetect = false, leftDetect = false, rightDetect = false;
-
 float storeX = 0;
 float storeY = 0;
 float storeZ = 0;
 
+float gestureVal = 0;
+
 void setup() {
   size(1280,800);
   //fullScreen();
-  font = loadFont("SansSerif-48.vlw");
-  
-  // Initialise the ControlIO
-  control = ControlIO.getInstance(this);
-  // Find a device that matches the configuration file
-  //gpad = control.getMatchedDevice("tank_game");
- // if (gpad == null) {
-   // println("No suitable device configured");
-    //System.exit(-1); // End the program NOW!
-  //}
   
   println("dot " + randArrayX[randx], randArrayY[randy]);
   
@@ -80,24 +40,11 @@ void setup() {
     randArrayY[randy] = randArrayY[randy] + 160;
   }
   
-  //oscP5 = new OscP5(this,9000);
-  
-  //oscP5.plug(this,"rawaccel","/wii/1/accel/xyz");
-  //oscP5.plug(this,"x","/wii/1/accel/xyz/0");
-  //oscP5.plug(this,"y","/wii/1/accel/xyz/1");
- // oscP5.plug(this,"z","/wii/1/accel/xyz/2");
-}
-
-void rawaccel(float _x, float _y, float _z) {
-  x = -1 * (_x - 0.5);
-  y = _y - 0.5;
-  z = _z - 0.5;
+  oscP5 = new OscP5(this,7400);
 }
 
 void draw() 
 {
-  //println(grt.getPredictedClassLabel());
-  
 for (int x = -80; x < width; x+=160) 
 {
   for (int y = 0; y < height; y+=160)
@@ -133,14 +80,6 @@ for (int x = -80; x < width; x+=160)
   
   text(zval, 10, 70, 250, 80);
   
-  xval = str(x * 75);
-  yval = str(y * 75);
-  zval = str(z * 75);
-  
-  xvalEd = x * 75;
-  yvalEd = y * 75;
-  zvalEd = z * 75;
-  
   if (following == true) {
     randArrayX[randx] = posx + 60;
     randArrayY[randy] = posy + 60;
@@ -148,88 +87,153 @@ for (int x = -80; x < width; x+=160)
   else{
     following = false;
   }
-  
-  checkMovement();
 }
 
-void checkMovement(){
-  if (yvalEd > 7 && yvalEd <10){
-    println ("LEFT");
-    leftDetect = true;
-    downDetect = false;
-    upDetect = false;
-    rightDetect = false;
-    
-    if (leftDetect == true){
-    posx= posx-160;
-    }
-    else if (rightDetect == true||
-    downDetect == true ||
-    upDetect == true){
-      //nothing
-    }
+// =========================================================
+void keyPressed()
+{
+  if (key == 'v')
+  {
+    //following = true;
+    //following = !following;
+    checkOverlap();
+       if (overlap == true){
+       following = !following;
+       }
+  }
+  if (key == 'p')
+  {
+    restart();
+  }
+  if (key == CODED)
+  {
+    if (keyCode == LEFT)
+    {
+      //if (directionX>0) { 
+      //directionX=-1;
+      //directionY=0;
+      posx= posx-160;
       //}
       println(posx, posy);
       if (posx < 260){
         posx = 260;
       }
-  }
-  if (yvalEd < -10 && yvalEd > -12){
-    println ("RIGHT");
-    leftDetect = false;
-    downDetect = false;
-    upDetect = false;
-    rightDetect = true;
-    
-    if (rightDetect == true){
-    posx= posx+160;
     }
-    else if (leftDetect == true||
-    downDetect == true ||
-    upDetect == true){
-      //nothing
-    }
+    else if (keyCode == RIGHT)
+    {
+      //if (directionX<0) {  
+      //directionX=1;
+      //directionY=0;
+      posx= posx+160;
       //}
       println(posx, posy);
       if (posx > 900){
         posx = 900;
       }
-  }
-  if (xvalEd > 8){
-    println ("SELECT");
-    following = true;
-  }
-  if (zvalEd > 24){
-    println ("DOWN");
-    upDetect = false;
-    leftDetect = false;
-    downDetect = true;
-    rightDetect = false;
-    
-    if (downDetect == true){
-    posy = posy + 160;
     }
-    
-      //}
-      println(posx, posy);
-      if (posy > 660){
-        posy = 660;
-      }
-  }
-  if (zvalEd < -4){
-    println ("UP");
-    upDetect = true;
-    leftDetect = false;
-    downDetect = false;
-    rightDetect = false;
-    
-    if (upDetect == true){
-    posy = posy - 160;
-    }
+    else if (keyCode == UP)
+    {
+      //if (directionY<0) {
+      //directionY=-1;
+      //directionX=0;
+      posy = posy - 160;
       //}
       println(posx, posy);
       if (posy < 20){
         posy = 20;
       }
+    }
+    else if (keyCode == DOWN)
+    {
+      //if (directionY<0) { 
+      //directionY=1;
+      //directionX=0;
+      posy = posy + 160;
+      //}
+      println(posx, posy);
+      if (posy > 660){
+        posy = 660;
+      }
+    }
   }
+}
+
+void checkOverlap(){
+  if (randArrayX[randx] == 320 && posx == 260 && randArrayY[randy] == 80 & posy == 20){
+    overlap = true;
+  }
+  else{
+    overlap = false;
+  }
+}
+
+void restart(){
+  following = false;
+  
+  randx = (int)random(randArrayX.length); 
+  randy = (int)random(randArrayY.length); 
+  
+  posx=580;
+  posy=340;
+  
+  //making sure circle doesn't start on square
+  if(randArrayX[randx] == 640 && randArrayY[randy] == 400){
+    randArrayX[randx] = randArrayX[randx] + 160;
+    randArrayY[randy] = randArrayY[randy] + 160;
+  }
+}
+
+void oscEvent(OscMessage theOscMessage) {
+  //String value = theOscMessage.get(0).stringValue();
+  if(theOscMessage.checkAddrPattern("/gesture") == true){
+     value = theOscMessage.get(0).intValue();
+     
+     //RIGHT
+     if (value == 1){
+       posx= posx+160;
+      
+      println(posx, posy);
+      if (posx > 900){
+        posx = 900;
+      }
+     }
+     
+     //LEFT
+     if (value == 2){
+       posx= posx-160;
+     
+      println(posx, posy);
+      if (posx < 260){
+        posx = 260;
+      }
+     }
+     
+     //UP
+     if (value == 3){
+       posy = posy - 160;
+     
+      println(posx, posy);
+      if (posy < 20){
+        posy = 20;
+      }
+     }
+     
+     //DOWN
+     if (value == 4){
+       posy = posy + 160;
+      
+      println(posx, posy);
+      if (posy > 660){
+        posy = 660;
+      }
+     }
+     
+     //SELECT
+     if (value == 5){
+       checkOverlap();
+       if (overlap == true){
+       following = !following;
+       }
+     }
+}
 }
