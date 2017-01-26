@@ -165,4 +165,9 @@ public class Wiigee {
 			return deviceDiscovery.getDiscoveredWiimotes();
 	}
 
+	public static void setMotionChangeTime(int i) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -62,8 +62,8 @@ public class Frontend2 extends JFrame implements WiimoteListener, GestureListene
 	private int lastpressed = -1;
 	private Vector<WiimoteAccelerationEvent>[][] gestures = new Vector[5][15];
 	
-	private int oscportint = 3333;
-	private String oscipaddress = "127.0.0.1";  //  @jve:decl-index=0:
+	private int oscportint = 7400;
+	private String oscipaddress = "141.54.54.122";  //  @jve:decl-index=0:
 	private InetAddress oscaddress;  //  @jve:decl-index=0:
 	private OSCPortOut oscsender;
 	
@@ -129,6 +129,8 @@ public class Frontend2 extends JFrame implements WiimoteListener, GestureListene
 	private Vector<Integer> gesturetextfilearray = new Vector<Integer>();  //  @jve:decl-index=0:
 	
 	private int selectedgesture = -1;
+	
+	private int sense_time = 50;
 	
 	/**
 	 * This method initializes jScrollPane	
@@ -452,7 +454,6 @@ public class Frontend2 extends JFrame implements WiimoteListener, GestureListene
 		System.out.println("Button released");
 	}
 	
-
 	public void motionStartReceived(WiimoteMotionStartEvent event) {
 		//this.console.append("Motion starts\n");
 		//this.console.setCaretPosition(this.console.getDocument().getLength());
@@ -538,11 +539,11 @@ public class Frontend2 extends JFrame implements WiimoteListener, GestureListene
 		String[] datastring = parseStringAsArray(gesturearray);
 		int i = 0;
 		while (i < datastring.length) {
-			//System.out.println(datastring[i]);
+			System.out.println("with datastring" + datastring[i]);
 			if (datastring[i].contains(",") && this.lastpressed == Wiimote.BUTTON_A)  { // Beschleunigung
 				String[] arr = datastring[i].split(",");
 				double x = Double.parseDouble(arr[0]);
-				//System.out.println(x);
+				System.out.println("just I" + i);
 				double y = Double.parseDouble(arr[1]);
 				double z = Double.parseDouble(arr[2]);
 				double absvalue = Math.sqrt((x*x)+(y*y)+(z*z));
@@ -756,6 +757,15 @@ public class Frontend2 extends JFrame implements WiimoteListener, GestureListene
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+         }else if(e.getKeyCode() == KeyEvent.VK_F6){
+        	 sense_time = sense_time - 50;
+        	 System.out.println(sense_time);
+        	 wiimote.setMotionChangeTime(sense_time);
+         }
+         else if(e.getKeyCode() == KeyEvent.VK_F7){
+        	 sense_time = sense_time + 50;
+        	 System.out.println(sense_time);
+        	 wiimote.setMotionChangeTime(sense_time);
          }
 	}
 

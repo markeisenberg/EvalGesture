@@ -7,13 +7,18 @@ OscP5 oscP5;
 int box = 160;
 int radius = 10, directionX = 1, directionY = 0;
 float posx=580, posy=340;
-int value;
+int value, buttonval;
 
 float randArrayX[] = {320,480, 640, 800, 960};
 float randArrayY[] = {720, 560, 400, 240, 80};
 
 int randx = (int)random(randArrayX.length); 
 int randy = (int)random(randArrayY.length); 
+
+//NEW
+boolean bDisplayMessage;
+int startTime;
+int DISPLAY_DURATION = 2000; // 10s
 
 boolean following = false;
 boolean overlap = false;
@@ -29,8 +34,8 @@ float storeZ = 0;
 float gestureVal = 0;
 
 void setup() {
-  size(1280,800);
-  //fullScreen();
+  //size(1280,800);
+  fullScreen();
   
   println("dot " + randArrayX[randx], randArrayY[randy]);
   
@@ -74,11 +79,31 @@ for (int x = -80; x < width; x+=160)
   ellipse(randArrayX[randx], randArrayY[randy], 100, 100);
   
   fill (color(255, 255, 0));
-  text(xval, 10, 10, 250, 80);
+ // text(xval, 10, 10, 250, 80);
   
-  text(yval, 10, 40, 250, 80);
+ // text(yval, 10, 40, 250, 80);
   
-  text(zval, 10, 70, 250, 80);
+ // text(zval, 10, 70, 250, 80);
+  
+  if (bDisplayMessage)
+  {
+    fill(color(0, 255, 0));
+    rect(25, 159, 186, 133);
+    fill(0, 0, 0);
+    text("Gesture recognized!", 57, 214 , 244, 112);
+    textSize(14);
+    // If the spent time is above the defined duration
+    if (millis() - startTime > DISPLAY_DURATION)
+    {
+      // Stop displaying the message, thus resume the ball moving
+      bDisplayMessage = false;
+    }
+  }
+  else
+  {
+   
+  }
+  
   
   if (following == true) {
     randArrayX[randx] = posx + 60;
@@ -159,12 +184,102 @@ void keyPressed()
 }
 
 void checkOverlap(){
-  if (randArrayX[randx] == 320 && posx == 260 && randArrayY[randy] == 80 & posy == 20){
-    overlap = true;
+  //COLUMN 1
+  if (randArrayX[randx] == 320 && posx == 260 && randArrayY[randy] == 80 && posy == 20){
+    println("Over!" + randArrayX[randx] + posx + randArrayY[randy] + posy);
+    following = true;
   }
-  else{
-    overlap = false;
+  //else{
+   // overlap = false;
+  //}
+  if (randArrayX[randx] == 320 && posx == 260 && randArrayY[randy] == 240 && posy == 180){
+    following = true;
   }
+  //else {
+   // overlap = false;
+  // }
+  if (randArrayX[randx] == 320 && posx == 260 && randArrayY[randy] == 400 && posy == 340){
+    following = true;
+  }
+  if (randArrayX[randx] == 320 && posx == 260 && randArrayY[randy] == 560 && posy == 500){
+    following = true;
+  }
+  if (randArrayX[randx] == 320 && posx == 260 && randArrayY[randy] == 720 && posy == 660){
+    following = true;
+  }
+  
+  //COLUMN 2
+  if (randArrayX[randx] == 480 && posx == 420 && randArrayY[randy] == 80 && posy == 20){
+    following = true;
+  }
+  if (randArrayX[randx] == 480 && posx == 420 && randArrayY[randy] == 240 && posy == 180){
+    following = true;
+  }
+  if (randArrayX[randx] == 480 && posx == 420 && randArrayY[randy] == 400 && posy == 340){
+    following = true;
+  }
+  if (randArrayX[randx] == 480 && posx == 420 && randArrayY[randy] == 560 && posy == 500){
+    following = true;
+  }
+  if (randArrayX[randx] == 480 && posx == 420 && randArrayY[randy] == 720 && posy == 660){
+    following = true;
+  }
+  
+  //COLUMN 3
+  if (randArrayX[randx] == 640 && posx == 580 && randArrayY[randy] == 80 && posy == 20){
+    following = true;
+  }
+  if (randArrayX[randx] == 640 && posx == 580 && randArrayY[randy] == 240 && posy == 180){
+    following = true;
+  }
+  if (randArrayX[randx] == 640 && posx == 580 && randArrayY[randy] == 400 && posy == 340){
+    following = true;
+  }
+  if (randArrayX[randx] == 640 && posx == 580 && randArrayY[randy] == 560 && posy == 500){
+    following = true;
+  }
+  if (randArrayX[randx] == 640 && posx == 580 && randArrayY[randy] == 720 && posy == 660){
+    following = true;
+  }
+  
+  //COLUMN 4
+  if (randArrayX[randx] == 800 && posx == 740 && randArrayY[randy] == 80 && posy == 20){
+    following = true;
+  }
+  if (randArrayX[randx] == 800 && posx == 740 && randArrayY[randy] == 240 && posy == 180){
+    following = true;
+  }
+  if (randArrayX[randx] == 800 && posx == 740 && randArrayY[randy] == 400 && posy == 340){
+   following = true;
+  }
+  if (randArrayX[randx] == 800 && posx == 740 && randArrayY[randy] == 560 && posy == 500){
+    following = true;
+  }
+  if (randArrayX[randx] == 800 && posx == 740 && randArrayY[randy] == 720 && posy == 660){
+    following = true;
+  }
+  
+  //COLUMN 5
+  if (randArrayX[randx] == 960 && posx == 900 && randArrayY[randy] == 80 && posy == 20){
+    following = true;
+  }
+  if (randArrayX[randx] == 960 && posx == 900 && randArrayY[randy] == 240 && posy == 180){
+    following = true;
+  }
+  if (randArrayX[randx] == 960 && posx == 900 && randArrayY[randy] == 400 && posy == 340){
+    following = true;
+  }
+  if (randArrayX[randx] == 960 && posx == 900 && randArrayY[randy] == 560 && posy == 500){
+    following = true;
+  } 
+  if (randArrayX[randx] == 960 && posx == 900 && randArrayY[randy] == 720 && posy == 660){
+    println("Over!");
+    following = true;
+  }
+  
+  //else{
+    //following = false;
+  //}
 }
 
 void restart(){
@@ -191,6 +306,8 @@ void oscEvent(OscMessage theOscMessage) {
      //RIGHT
      if (value == 1){
        posx= posx+160;
+       bDisplayMessage = true;
+       startTime = millis();
       
       println(posx, posy);
       if (posx > 900){
@@ -201,6 +318,8 @@ void oscEvent(OscMessage theOscMessage) {
      //LEFT
      if (value == 2){
        posx= posx-160;
+       bDisplayMessage = true;
+       startTime = millis();
      
       println(posx, posy);
       if (posx < 260){
@@ -211,6 +330,8 @@ void oscEvent(OscMessage theOscMessage) {
      //UP
      if (value == 3){
        posy = posy - 160;
+       bDisplayMessage = true;
+       startTime = millis();
      
       println(posx, posy);
       if (posy < 20){
@@ -221,6 +342,8 @@ void oscEvent(OscMessage theOscMessage) {
      //DOWN
      if (value == 4){
        posy = posy + 160;
+       bDisplayMessage = true;
+       startTime = millis();
       
       println(posx, posy);
       if (posy > 660){
@@ -231,9 +354,18 @@ void oscEvent(OscMessage theOscMessage) {
      //SELECT
      if (value == 5){
        checkOverlap();
-       if (overlap == true){
-       following = !following;
-       }
+       bDisplayMessage = true;
+       startTime = millis();
+       
+       //if (overlap == true){
+       //following = !following;
+       //}
      }
+}
+if(theOscMessage.checkAddrPattern("button") == true){
+  buttonval = theOscMessage.get(0).intValue();
+  if (buttonval == 1){
+    restart();
+  }
 }
 }

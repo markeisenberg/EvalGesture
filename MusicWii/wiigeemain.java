@@ -51,7 +51,7 @@ public class wiigeemain{
 		    wiigee = Wiigee.getInstance();
 			
 			wiigee.setTrainButton(Wiimote.BUTTON_A);
-			wiigee.setRecognitionButton(Wiimote.BUTTON_B);
+			wiigee.setRecognitionButton(Wiimote.BUTTON_2);
 			wiigee.setCloseGestureButton(Wiimote.BUTTON_HOME);
 			
 			
