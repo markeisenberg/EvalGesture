@@ -65,7 +65,7 @@ for (int x = -80; x < width; x+=160)
   rect(1280, 0, -239, 800);
   fill(0, 0, 0);
   
-  fill (color(222, 22, 22)); 
+  fill (color(249, 5, 22)); 
   rect(posx, posy, 120, 120);
   
   ellipseMode(CENTER);
@@ -300,6 +300,8 @@ void restart(){
 
 void oscEvent(OscMessage theOscMessage) {
   //String value = theOscMessage.get(0).stringValue();
+  //OLD with WiiGee
+  /*
   if(theOscMessage.checkAddrPattern("/gesture") == true){
      value = theOscMessage.get(0).intValue();
      
@@ -361,7 +363,56 @@ void oscEvent(OscMessage theOscMessage) {
        //following = !following;
        //}
      }
+}*/
+
+//Wizard Of OZ - WiiMote
+
+//SELECT
+/*if(theOscMessage.checkAddrPattern("/wii/1/button/2/1") == true){
+       checkOverlap();
+       bDisplayMessage = true;
+       startTime = millis();
 }
+if(theOscMessage.checkAddrPattern("/wii/1/button/Up/1") == true){
+       posx= posx-160;
+       bDisplayMessage = true;
+       startTime = millis();
+     
+      println(posx, posy);
+      if (posx < 260){
+        posx = 260;
+      }
+}
+if(theOscMessage.checkAddrPattern("/wii/1/button/Down/1") == true){
+       posx= posx+160;
+       bDisplayMessage = true;
+       startTime = millis();
+      
+      println(posx, posy);
+      if (posx > 900){
+        posx = 900;
+      }
+}
+if(theOscMessage.checkAddrPattern("/wii/1/button/Left/1") == true){
+        posy = posy + 160;
+       bDisplayMessage = true;
+       startTime = millis();
+      
+      println(posx, posy);
+      if (posy > 660){
+        posy = 660;
+      }
+}
+if(theOscMessage.checkAddrPattern("/wii/1/button/Right/1") == true){
+       posy = posy - 160;
+       bDisplayMessage = true;
+       startTime = millis();
+     
+      println(posx, posy);
+      if (posy < 20){
+        posy = 20;
+      }
+     }*/
 if(theOscMessage.checkAddrPattern("button") == true){
   buttonval = theOscMessage.get(0).intValue();
   if (buttonval == 1){
